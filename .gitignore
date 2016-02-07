@@ -6,6 +6,8 @@ pom.xml
 /.lein-failures
 /checkouts
 /.lein-deps-sum
-/target
+target/**
 .classpath
 .project
+.nrepl-port
+.lein-repl-history

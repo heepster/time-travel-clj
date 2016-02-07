@@ -6,4 +6,11 @@
 lein run
 ```
 
+## Testing
+
+```
+lein test
+```
+
+
 
