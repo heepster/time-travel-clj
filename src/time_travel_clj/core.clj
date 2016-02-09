@@ -27,5 +27,5 @@
     (let [input (read-line)
           cmd-map (parse-cmd input)]
       (case (get-cmd cmd-map)
-        "echo" (cmd-echo (get-args cmd-map))
+        "echo" (cmd-echo (str/join (get-args cmd-map)))
         (not-a-cmd (get-cmd cmd-map))))))
