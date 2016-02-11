@@ -1,8 +1,12 @@
 (ns time-travel-clj.filesystem
+  (:use [slingshot.slingshot :only [throw+]])
   (:require [clojure.string :as str]))
 
 (def ^:dynamic filesystem-history (atom [{}]))
 (def ^:dyanmic current-position (atom 0))
+
+(defn throw-exception! [exception-type]
+  (throw+ {:type exception-type}))
 
 (defn vectorize-path [path]
   "Converts a file path into a vector
@@ -23,7 +27,7 @@
     (do 
       (reset! filesystem-history (conj @filesystem-history filesystem))
       (reset! current-position (inc @current-position)))
-    (throw (Exception. "Cannot write to filesystem while time is rewinded"))))
+    (throw-exception! :filesystem-lock)))
 
 (defn get-filesystem []
   (@filesystem-history @current-position))
@@ -45,7 +49,7 @@
   (let [pos (- @current-position i)]
     (if (within-filesystem-history-bounds? pos)
       (reset! current-position pos)
-      (throw (Exception. "Can't rewind by that amount")))))
+      (throw-exception! :index-out-of-history-bounds))))
 
 (defn fast-forward-by! [i]
   "Moves forward the current position by integer i
@@ -54,7 +58,7 @@
   (let [pos (+ @current-position i)]
     (if (within-filesystem-history-bounds? pos)
       (reset! current-position pos)
-      (throw (Exception. "Can't fast forward by that amount")))))
+      (throw-exception! :index-out-of-history-bounds))))
 
 (defn dir-exists? [path]
   (if (get-in (get-filesystem) (vectorize-path path))
