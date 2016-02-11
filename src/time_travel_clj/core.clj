@@ -14,6 +14,17 @@
 (defn get-args [cmd-map]
   (:args cmd-map))
 
+;(defn cmd-echo [string]
+;  (let [arr (re-seq #"\"[^\"]+\"|\'[^\']+\'|[^\"\']+" string)]
+;  (println (apply str arr)))) ;(apply str (str/split (apply str arr) #"(\"|\')" )))))
+
+;(defn cmd-echo [string]
+;  (let [arr (str/split string #"\s")]
+;  (loop [x arr]
+;    (when (> x 1)
+;	  (println x)
+;	  (recur (- x 2)))))
+
 (defn cmd-echo [string]
   (println string))
 
@@ -27,5 +38,5 @@
     (let [input (read-line)
           cmd-map (parse-cmd input)]
       (case (get-cmd cmd-map)
-        "echo" (cmd-echo (str/join (get-args cmd-map)))
+        "echo" (cmd-echo (str/join " " (get-args cmd-map)))
         (not-a-cmd (get-cmd cmd-map))))))
