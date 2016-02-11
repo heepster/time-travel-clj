@@ -14,19 +14,12 @@
 (defn get-args [cmd-map]
   (:args cmd-map))
 
-;(defn cmd-echo [string]
-;  (let [arr (re-seq #"\"[^\"]+\"|\'[^\']+\'|[^\"\']+" string)]
-;  (println (apply str arr)))) ;(apply str (str/split (apply str arr) #"(\"|\')" )))))
-
-;(defn cmd-echo [string]
-;  (let [arr (str/split string #"\s")]
-;  (loop [x arr]
-;    (when (> x 1)
-;	  (println x)
-;	  (recur (- x 2)))))
-
 (defn cmd-echo [string]
-  (println string))
+  (let [arr (re-seq #"\"[^\"]+\"|\'[^\']+\'|[^\"\']+" string)]
+  (dorun
+  (for [word arr]
+  (if (or (= (first word) \") (= (first word) \')) (print (subs word 1 (- (count word) 1))) (print word))))
+  (println)))
 
 (defn not-a-cmd [cmd]
   (println (str " -time-travel-clj: " cmd ": command not found")))
