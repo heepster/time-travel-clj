@@ -12,5 +12,38 @@ lein run
 lein test
 ```
 
+## Repl Development
+To speed up development, you can use Clojure's repl:
+
+```
+lein repl
+```
+
+which starts the REPL: 
+
+```
+nREPL server started on port 58024 on host 127.0.0.1 - nrepl://127.0.0.1:58024
+REPL-y 0.3.5, nREPL 0.2.6
+Clojure 1.6.0
+Java HotSpot(TM) 64-Bit Server VM 1.8.0_25-b17
+Docs: (doc function-name-here)
+      (find-doc "part-of-name-here")
+      Source: (source function-name-here)
+      Javadoc: (javadoc java-object-or-class-here)
+      Exit: Control+D or (exit) or (quit)
+      Results: Stored in vars *1, *2, *3, an exception in *e
+time-travel-clj.core=>
+```
+
+You can run tests in the REPL with: 
+
+```
+time-travel-clj.core=> (require 'time-travel-clj.core :reload-all)
+nil
+time-travel-clj.core=> (clojure.test/run-tests)
+```
+
+If you make changes to `src/`, you can just do the first command again to reload all files, instead of incurring the cost of `lein test` or restarting the repl.
+
 
 
