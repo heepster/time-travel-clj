@@ -1,6 +1,10 @@
 (ns time-travel-clj.core
   (:require [clojure.java.shell :only [sh]]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [time-travel-clj.commands.fast-forward-by :as fast-forward-by]
+            [time-travel-clj.commands.rewind-by :as rewind-by]
+            [time-travel-clj.commands.ls :as ls]
+            [time-travel-clj.commands.mkdir :as mkdir]))
 
 (def promptStr "time-travel-clj => ")
 
@@ -32,4 +36,8 @@
           cmd-map (parse-cmd input)]
       (case (get-cmd cmd-map)
         "echo" (cmd-echo (str/join " " (get-args cmd-map)))
+        "ls" (ls/execute (get-args cmd-map))
+        "mkdir" (mkdir/execute (get-args cmd-map))
+        "rewind-by" (rewind-by/execute (get-args cmd-map))
+        "fast-forward-by" (fast-forward-by/execute (get-args cmd-map))
         (not-a-cmd (get-cmd cmd-map))))))

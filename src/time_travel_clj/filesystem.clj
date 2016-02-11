@@ -77,6 +77,3 @@
    Useful for testing purposes"
    (reset! filesystem-history [{}])
    (reset! current-position 0))
-
-
-
