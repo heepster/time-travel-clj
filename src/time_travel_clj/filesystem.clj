@@ -34,15 +34,23 @@
   (count @filesystem-history))
 
 (defn within-filesystem-history-bounds? [i]
+  "Given an integer, checks to see if that integer
+   is within the filesystem history array size"
   (and (>= i 0) (< i (get-filesystem-history-size))))
 
 (defn rewind-by! [i]
+  "Moves back the current position by integer i
+   Will raise an error if i is not within filesystem
+   history bounds"
   (let [pos (- @current-position i)]
     (if (within-filesystem-history-bounds? pos)
       (reset! current-position pos)
       (throw (Exception. "Can't rewind by that amount")))))
 
 (defn fast-forward-by! [i]
+  "Moves forward the current position by integer i
+   Will raise an error if i is not within filesystem
+   history bounds"
   (let [pos (+ @current-position i)]
     (if (within-filesystem-history-bounds? pos)
       (reset! current-position pos)
@@ -58,6 +66,17 @@
     (throw (Exception. (str path " already exists")))
     (-update-filesystem! (-add-dir-to-fs-map (get-filesystem) (vectorize-path path)))))
 
-(defn rm-dir! [path])
+(defn rm-dir! [path]
+  (if (not (dir-exists? path))
+    (throw (Exception. (str path " does not exist")))
+    (-update-filesystem! (-del-dir-from-fs-map (get-filesystem) (vectorize-path path)))))
+
+(defn -reset-filesystem! []
+  "Resets the filesystem to be empty
+   Use with CAUTION.
+   Useful for testing purposes"
+   (reset! filesystem-history [{}])
+   (reset! current-position 0))
+
 
 
