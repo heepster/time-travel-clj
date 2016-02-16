@@ -7,4 +7,6 @@
   (try+
     (ttf/create-dir! (first path))
     (catch [:type :filesystem-lock] _
-      (println "Filesystem has been locked -- probably because you have fast forwarded or rewound time"))))
+      (println "Filesystem has been locked -- probably because you have fast forwarded or rewound time"))
+    (catch [:type :path-exists] {:keys [msg]}
+      (println msg))))
