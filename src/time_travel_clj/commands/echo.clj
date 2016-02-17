@@ -22,7 +22,8 @@
    (str/join @output)))
 
 (defn execute [stringarr]
-  (println
+  (out/write!
    (generate-output
     (parse-arg
-	 (str/join " " stringarr)))))
+	 (str/join " " stringarr))))
+  (out/printout))
