@@ -1,8 +1,8 @@
 # Time Travel Clj
 
-Time travel Clj is a toy shell with an immutable filesystem.  You can create and delete files and directories and "undo" or "redo" your changes.  It works by taking advantage of Clojure's immutable data structures, and building a filesystem on top of them.
+Time Travel Clj is a toy shell with an immutable filesystem.  You can create and delete files and directories and "undo" or "redo" your changes.  It works by taking advantage of Clojure's immutable data structures, and building a filesystem on top of them.
 
-Use for educational purposes.
+This was built for a class project -- use for educational purposes.
 
 ## Demo
 
@@ -32,6 +32,24 @@ Will bring up a prompt that looks like:
 
 ```
 time-travel-clj $
+```
+
+To see available commands:
+
+```
+time-travel-clj $ help
+Available commands:
+
+echo
+ls
+cat
+mkdir
+create-file
+rm
+rewind-by
+fast-forward-by
+stay
+exit
 ```
 
 ## Testing
