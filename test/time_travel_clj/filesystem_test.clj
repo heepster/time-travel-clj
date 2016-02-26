@@ -41,6 +41,12 @@
           fs-map {:home {:bob {}}}]
       (is (= (ttf/-del-from-fs-map fs-map dir) {:home {}})))))
 
+(deftest del-dir-from-fs-map-test-1
+  (testing "del-dir-from-fs-map-test"
+    (let [dir (ttf/vectorize-path "/bob")
+          fs-map {:bob {}}]
+      (is (= (ttf/-del-from-fs-map fs-map dir) {})))))
+
 (deftest dir-exists-test-1
   (testing "dir exists test"
     (let [fs-map (ttf/get-filesystem)

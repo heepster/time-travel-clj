@@ -48,7 +48,9 @@
 (defn -del-from-fs-map [fs-map path-vec]
   "Given a fs-map and a file path as a vector,
    removes the contents from the fs-map at the vector destination"
-  (update-in fs-map (drop-last path-vec) dissoc (last path-vec)))
+  (if (> (count path-vec) 1)
+    (update-in fs-map (drop-last path-vec) dissoc (last path-vec))
+    (dissoc fs-map (first path-vec))))
 
 (defn at-latest-filesystem-version? []
   (= @current-position (dec (count @filesystem-history))))
@@ -91,6 +93,12 @@
       (reset! current-position pos)
       (throw-exception! :index-out-of-history-bounds))))
 
+(defn set-current-version-as-latest! []
+  "Sets the current version of the filesystem
+   as the latest version.  This operation is destructive
+   from the filesystem's perspective -- it cannot be reverted."
+  (reset! filesystem-history (into [] (take (inc @current-position) @filesystem-history))))
+    
 (defn exists? [path]
   (if (get-in (get-filesystem) (vectorize-path path))
     true

@@ -6,9 +6,12 @@
             [time-travel-clj.commands.ls :as ls]
             [time-travel-clj.commands.mkdir :as mkdir]
             [time-travel-clj.commands.create-file :as create-file]
+            [time-travel-clj.commands.rm :as rm]
+            [time-travel-clj.commands.stay :as stay]
             [time-travel-clj.commands.cat :as cat]))
 
 (def prompt-str "time-travel-clj $ ")
+(def commands [ "echo" "ls" "cat" "mkdir" "create-file" "rm" "rewind-by" "fast-forward-by" "stay" "exit" ])
 (def ^:dynamic prompt-loop (atom true))
 
 (defn parse-cmd [cmd]
@@ -35,16 +38,23 @@
   (while @prompt-loop
     (print prompt-str)
     (flush)
-    (let [input (read-line)
-          cmd-map (parse-cmd input)]
-      (case (get-cmd cmd-map)
-        "echo" (cmd-echo (str/join " " (get-args cmd-map)))
-        "ls" (ls/execute (get-args cmd-map))
-        "cat" (cat/execute (get-args cmd-map))
-        "mkdir" (mkdir/execute (get-args cmd-map))
-        "create-file" (create-file/execute (get-args cmd-map))
-        "rewind-by" (rewind-by/execute (get-args cmd-map))
-        "fast-forward-by" (fast-forward-by/execute (get-args cmd-map))
-        "exit" (reset! prompt-loop false)
-        (not-a-cmd (get-cmd cmd-map))))))
+    (try
+      (let [input (read-line)
+            cmd-map (parse-cmd input)]
+        (case (get-cmd cmd-map)
+          "echo" (cmd-echo (str/join " " (get-args cmd-map)))
+          "ls" (ls/execute (get-args cmd-map))
+          "cat" (cat/execute (get-args cmd-map))
+          "mkdir" (mkdir/execute (get-args cmd-map))
+          "create-file" (create-file/execute (get-args cmd-map))
+          "rm" (rm/execute (get-args cmd-map))
+          "rewind-by" (rewind-by/execute (get-args cmd-map))
+          "fast-forward-by" (fast-forward-by/execute (get-args cmd-map))
+          "stay" (stay/execute)
+          "help" (do 
+                   (println "Available commands:\n")
+                   (println (reduce str (map #(str % "\n") commands))))
+          "exit" (reset! prompt-loop false)
+          (not-a-cmd (get-cmd cmd-map))))
+      (catch Exception e (println (str "Error: " (.getMessage e)))))))
 

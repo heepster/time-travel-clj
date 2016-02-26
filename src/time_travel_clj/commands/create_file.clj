@@ -3,7 +3,7 @@
   (:use [slingshot.slingshot :only [throw+ try+]]))
 
 (defn get-args [args]
-  {:path (first args) :contents (second args)})
+  {:path (first args) :contents (apply str (map #(str % " ") (rest args)))})
 
 (defn execute [args]
   (try+ 
