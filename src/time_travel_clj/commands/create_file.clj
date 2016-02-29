@@ -9,5 +9,7 @@
   (try+ 
     (let [{:keys [path contents]} (get-args args)]
       (ttf/create-file! path contents))
+    (catch [:type :filesystem-lock] _
+      (println "Filesystem has been locked -- probably because you have fast forwarded or rewound time"))
     (catch [:type :path-exists] {:keys [msg]}
       (println msg))))
